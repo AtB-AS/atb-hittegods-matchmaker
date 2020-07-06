@@ -4,6 +4,7 @@ from os.path import join, dirname
 from dotenv import load_dotenv
 import psycopg2
 
+test = ""
 
 dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(dotenv_path)
@@ -19,9 +20,9 @@ app=Flask(__name__)
 def hello():
     return "halla"
 
-@app.route("/test")
+@app.route("/name")
 def hello2():
-    return "hei test"
+    return str(get_names())
 
 
 print("***************")
@@ -41,7 +42,10 @@ def doQuery( conn ) :
     result = cur.fetchall()
     for row in result:
         print(row[0])
+    return row
 
-myConnection = psycopg2.connect( host=hostname, user=username, password=password, dbname=database )
-doQuery( myConnection )
-myConnection.close()
+def get_names():
+    myConnection = psycopg2.connect(host=hostname, user=username, password=password, dbname=database)
+    query = doQuery( myConnection )
+    myConnection.close()
+    return query
