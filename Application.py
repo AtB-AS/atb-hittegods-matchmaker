@@ -3,12 +3,12 @@ import os
 from os.path import join, dirname
 from dotenv import load_dotenv
 import psycopg2
+import Mathing
 
 test = ""
 
 dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(dotenv_path)
-
 
 DB_HOST = os.environ.get("DB_HOST")
 DB_PORT = os.environ.get("DB_PORT")
@@ -16,24 +16,16 @@ DB_NAME = os.environ.get("DB_NAME")
 DB_USER = os.environ.get("DB_USER")
 DB_PASSWORD = os.environ.get("DB_PASSWORD")
 
-print(DB_HOST)
-print(DB_PORT)
-print(DB_NAME)
-print(DB_USER)
-print(DB_PASSWORD)
-
-
-
 app=Flask(__name__)
 @app.route("/")
 def hello():
-    return "halla"
+    return (str(Mathing.testMatching()))
 
 @app.route("/name")
 def hello2():
     return str(get_names())
 
-
+print(Mathing.testMatching())
 print("***************")
 print(os.getenv('DB_HOST'))
 

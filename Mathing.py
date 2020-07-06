@@ -79,8 +79,7 @@ def findBestMatches(s,ref,n,plot=False):
         plt.figure()
         plt.bar([i for i in range(len(refS))], list(sortedRefS.values()))
     
-    print('Best ' +str(n)+ ' Matches: \nref: ' + str(bestMatches) +'\ns: ' + str(bestS))
-    
+
     return [bestMatches,bestS]
     
     
@@ -120,9 +119,10 @@ def Matching(x,data,n):
 def testMatching():
     x=[0,'Elektronikk','Mobil','Svart', 4,'5/1/2020','Bose']
     data=getDataFrame('Data/random1000.txt')
-    
+
     matches=Matching(x,data,5)
-    print(matches)
+    return matches
+
 
 
 
