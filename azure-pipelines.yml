@@ -8,7 +8,7 @@ trigger:
 
 variables:
   # Azure Resource Manager connection created during pipeline creation
-  azureServiceConnectionId: '09132230-d2ac-4911-bf79-b9ea006498fa'
+  azureSubscription: '268fecca-d74a-44a2-8712-34c19828082d'
   
   # Web app name
   webAppName: 'hittegods-matchmaker'
@@ -82,6 +82,6 @@ stages:
           - task: AzureWebApp@1
             displayName: 'Deploy Azure Web App : hittegods-matchmaker'
             inputs:
-              azureSubscription: $(azureServiceConnectionId)
+              azureSubscription: $(azureSubscription)
               appName: $(webAppName)
               package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
