@@ -4,8 +4,8 @@ from os.path import join, dirname
 from dotenv import load_dotenv
 import psycopg2
 import Mathing
-
-test = ""
+import pandas as pd
+import sqlite3
 
 dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(dotenv_path)
@@ -19,15 +19,12 @@ DB_PASSWORD = os.environ.get("DB_PASSWORD")
 app=Flask(__name__)
 @app.route("/")
 def hello():
+    pd.reads
     return (str(Mathing.testMatching()))
 
 @app.route("/name")
 def hello2():
-    return str(get_names())
-
-print(Mathing.testMatching())
-print("***************")
-print(os.getenv('DB_HOST'))
+    return print((get_from_dataframe()))
 
 hostname = os.environ.get("DB_HOST")
 username = os.environ.get("DB_USER")
@@ -48,5 +45,16 @@ def doQuery( conn ) :
 def get_names():
     myConnection = psycopg2.connect(host=hostname, user=username, password=password, dbname=database)
     query = doQuery( myConnection )
+    df = pd.read_sql_query("select * from lost;", myConnection)
     myConnection.close()
     return query
+
+def get_from_dataframe():
+    myConnection = psycopg2.connect(host=hostname, user=username, password=password, dbname=database)
+    query = doQuery(myConnection)
+    df = pd.read_sql_query("select * from lost;", myConnection)
+    print("****** df *****")
+    return df
+    print(df)
+
+get_from_dataframe()
