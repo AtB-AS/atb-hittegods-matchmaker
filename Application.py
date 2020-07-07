@@ -1,9 +1,13 @@
 from flask import Flask
 import exception_handling
 import database
+
+import Mathing
+
 from flask import render_template
 
 app=Flask(__name__, template_folder='exception_handling/templates', static_folder='exception_handling/static')
+
 
 @app.route("/")
 def root():
@@ -39,4 +43,18 @@ def internal_error(error):
     return render_template('500.html', error=error), 500, data
 
 
+@app.route("/matching")
+def matchingFromDB():
 
+    allLost = database.get_all_lost()
+    lost=database.get_lost("42f8f207-c09a-4b03-8281-726a73b80094")
+
+    x=lost
+    data=allLost
+
+    print(list(data.columns))
+    print("length of x :" + str(len(x)))
+
+    bestMatches=Mathing.doMatching(x,data,5)
+
+    return str(list(bestMatches))
