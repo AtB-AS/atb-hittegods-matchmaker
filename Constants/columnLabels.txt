@@ -1,0 +1,1 @@
+catid,subcatid,brand,date,lineid,colorid
