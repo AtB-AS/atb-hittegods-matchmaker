@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 import math
 from collections import OrderedDict
 from operator import itemgetter
+import columns
 
 
 #TODO forskjellig vekting for positiv og negativ correlation
@@ -31,7 +32,7 @@ def compareEntries(x1,x2):
 
 def applyWights(weights,values):
     weightedValues=[]
-    for i in range(len(weights)):
+    for i in range(len(values)):
         weightedValues.append(weights[i]*values[i])
     return weightedValues
         
@@ -61,6 +62,8 @@ def getDataFrame(fileLocation):
     return df
 
 
+
+
 def findBestMatches(s,ref,n,plot=False):
     
     refS={ref[i]:s[i] for i in range(len(ref))}
@@ -82,28 +85,39 @@ def findBestMatches(s,ref,n,plot=False):
 
     return [bestMatches,bestS]
     
-    
+def lostOrFound(df):
 
-def Matching(x,data,n):
+    if('lostid' in list(df.columns)):
+        return 'lost'
+    elif('foundid' in list(df.columns)):
+        return 'found'
+    else:
+        return None
+
+def Matching(x_df,data,n):
     weights=getWeights()
-    
+
+    x_type=lostOrFound(x_df)
+    y_type=lostOrFound(data)
+
     s=[]
     ref=[]
     
-    x_values=x.remove(x[len(x)-1])
-    
+    x=columns.getRowValues(0,x_df,x_type)
     x_ref=x[0]
-    
+    x_values=x
+    x_values.remove(x_ref)
+
 
     for i in range(len(data)):
         #dont compare ref num??
         
-        y=list(dict(data.iloc[i]).values())
-        
-        
+        y=columns.getRowValues(i,data,y_type)
         y_ref=y[0]
-        y_values=y.remove(y[len(y)-1])
-        s.append(round(calculateSimilarity(weights,compareEntries(x,y)),3))
+        y_values=y
+        y_values.remove(y_ref)
+
+        s.append(round(calculateSimilarity(weights,compareEntries(x_values,y_values)),3))
         ref.append(y_ref)
         
     
@@ -123,25 +137,10 @@ def testMatching():
     matches=Matching(x,data,5)
     return matches
 
+def doMatching(x, data, n):
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    matches=Matching(x,data,10)
+    return matches
 
 
 
