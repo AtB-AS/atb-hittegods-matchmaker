@@ -46,14 +46,8 @@ def internal_error(error):
 @app.route("/matching")
 def matchingFromDB():
 
-    allLost = database.get_all_lost()
-    lost=database.get_lost("42f8f207-c09a-4b03-8281-726a73b80094")
-
-    x=lost
-    data=allLost
-
-    print(list(data.columns))
-    print("length of x :" + str(len(x)))
+    data = database.get_all_lost()
+    x=database.get_found(1)
 
     bestMatches=Mathing.doMatching(x,data,5)
 

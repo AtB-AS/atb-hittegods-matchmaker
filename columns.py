@@ -9,8 +9,6 @@ def getColumnLabels(lost=False,found=False):
         labels.insert(0,'lostid')
     if(found):
         labels.insert(0, 'foundid')
-
-    print("LABELS:  " + str(labels))
     file.close()
     return labels
 

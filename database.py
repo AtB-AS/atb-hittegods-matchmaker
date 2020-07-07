@@ -36,11 +36,11 @@ def get_all_found():
     return read_query(myConnection, "select * from found;")
 
 
-def get_found(lostID):
+def get_lost(lostID):
     return read_query(myConnection, "select * from lost where lostid = %s;"%(lostID))
 
 
-def get_lost(foundID):
+def get_found(foundID):
     return read_query(myConnection, "select * from found where foundid = %s;"%(foundID))
 
 

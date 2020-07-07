@@ -111,12 +111,16 @@ def Matching(x_df,data,n):
 
     for i in range(len(data)):
         #dont compare ref num??
-        
+
+
+
         y=columns.getRowValues(i,data,y_type)
+        print(x_values)
+
         y_ref=y[0]
         y_values=y
         y_values.remove(y_ref)
-
+        print(y_values)
         s.append(round(calculateSimilarity(weights,compareEntries(x_values,y_values)),3))
         ref.append(y_ref)
         
