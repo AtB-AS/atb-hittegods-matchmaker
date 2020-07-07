@@ -16,8 +16,10 @@ myConnection = psycopg2.connect(host=hostname, user=username, password=password,
 
 def read_query(connection, query):
     cursor = connection.cursor()
+    print(query)
     try:
         cursor.execute( query )
+        connection.commit()
         names = [ x[0] for x in cursor.description]
         rows = cursor.fetchall()
         return pd.DataFrame( rows, columns=names)
@@ -34,13 +36,13 @@ def get_all_found():
     return read_query(myConnection, "select * from found;")
 
 
-def get_all_found(lostID):
-    return read_query(myConnection, "select * from lost where lostid = '"+lostID+"';")
+def get_found(lostID):
+    return read_query(myConnection, "select * from lost where lostid = %s;"%(lostID))
 
 
-def get_all_lost(foundID):
-    return read_query(myConnection, "select * from found where foundid = '"+foundID+"';")
+def get_lost(foundID):
+    return read_query(myConnection, "select * from found where foundid = %s;"%(foundID))
 
 
 def insert_match_table(score, lostID, foundID):
-    return read_query(myConnection, "INSERT INTO public.match( score, lostID, foundID) VALUES ('"+score+"','"+lostID+"','"+foundID+"');")
+    return read_query(myConnection, "INSERT INTO match ( lostid, foundid, score, new) VALUES (%s, %s, %s, true);"%(lostID,foundID,score))

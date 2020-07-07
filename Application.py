@@ -16,8 +16,12 @@ def get_score():
 
 @app.route("/name")
 def insert_to_database():
-    database.insert_match_table("1", "2", "2")
+    database.insert_match_table(4, 2, 3)
     return "inserted"
+
+@app.route("/get_found")
+def get_found():
+    return database.get_found(4).to_json()
 
 @app.errorhandler(400)
 def handle_bad_request(error):
