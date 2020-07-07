@@ -1,7 +1,7 @@
 from flask import Flask
 import exception_handling
 import database
-
+import MatchingFromDB
 import Mathing
 
 from flask import render_template
@@ -46,10 +46,5 @@ def internal_error(error):
 @app.route("/matching")
 def matchingFromDB():
 
-    data = database.get_all_lost()
-    x=database.get_found(1)
 
-    bestMatches=Mathing.doMatching(x,data,5)
-
-
-    return str(list(bestMatches))
+    return MatchingFromDB.matchingDB('found',1)

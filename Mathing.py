@@ -143,7 +143,7 @@ def testMatching():
 
 def doMatching(x, data, n):
 
-    matches=Matching(x,data,10)
+    matches=Matching(x,data,n)
     return matches
 
 
