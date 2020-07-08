@@ -1,12 +1,7 @@
-from flask import Flask
-import exception_handling
 import database
 import MatchingFromDB
-import Mathing
-from flask_sslify import SSLify
-from flask import request
 from flask import render_template
-from flask import Flask, request, jsonify
+from flask import Flask, request
 
 app = Flask(
     __name__,
