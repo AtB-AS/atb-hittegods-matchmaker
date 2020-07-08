@@ -4,8 +4,9 @@ import database
 import MatchingFromDB
 import Mathing
 from flask_sslify import SSLify
-
+from flask import request
 from flask import render_template
+from flask import Flask, request, jsonify
 
 app = Flask(
     __name__,
@@ -36,6 +37,19 @@ def get_found():
     return database.get_found(4).to_json()
 
 
+@app.route("/query-example")
+def query_example():
+    language = request.args.get("language")  # if key doesn't exist, returns None
+
+    return """<h1>The language value is: {}</h1>""".format(language)
+
+
+@app.route("/actions", methods=["POST"])
+def actions():
+    title = request.args.get("title", "")
+    return "hei"
+
+
 @app.errorhandler(400)
 def handle_bad_request(error):
     data = {"status": "error", "errormessage ": error}
@@ -59,4 +73,4 @@ def matchingFromDB():
     return MatchingFromDB.matchingDB("found", 1)
 
 
-app.run(ssl_context=("cert.pem", "key.pem"))
+app.run(ssl_context="adhoc")
