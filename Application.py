@@ -71,6 +71,3 @@ def internal_error(error):
 @app.route("/matching")
 def matchingFromDB():
     return MatchingFromDB.matchingDB("found", 1)
-
-
-app.run(ssl_context="adhoc")
