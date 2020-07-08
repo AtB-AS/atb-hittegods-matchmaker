@@ -2,6 +2,7 @@ import database
 import MatchingFromDB
 from flask import render_template
 from flask import Flask, request
+from flask import jsonify
 
 app = Flask(
     __name__,
@@ -12,36 +13,27 @@ app = Flask(
 
 @app.route("/")
 def root():
-    return database.get_all_lost().to_json()
+    return "Melk"
 
 
-@app.route("/get_score")
-def get_score():
-    database.myConnection.rollback()
-    return database.get_lost("42f8f207-c09a-4b03-8281-726a73b8094").to_json()
+@app.route("/lost/<lost_id>")
+def lost(lost_id):
+    lostid = int(lost_id.split("\n")[0])
+    print(MatchingFromDB.matchingDB("lost", lostid))
+    return "funket"
 
 
-@app.route("/name")
-def insert_to_database():
-    database.insert_match_table(4, 2, 3)
-    return "inserted"
-
-
-@app.route("/get_found")
-def get_found():
-    return database.get_found(4).to_json()
-
-
-@app.route("/query-example")
-def query_example():
-    language = request.args.get("language")  # if key doesn't exist, returns None
-
-    return """<h1>The language value is: {}</h1>""".format(language)
+@app.route("/found/<found_id>")
+def found(found_id):
+    foundid = int(found_id.split("\n")[0])
+    print(MatchingFromDB.matchingDB("found", foundid))
+    return "funket"
 
 
 @app.route("/actions", methods=["POST"])
 def actions():
     title = request.args.get("title")
+    request.get_json()
     if not title:
         return "funket ikke"
     return title + "title"

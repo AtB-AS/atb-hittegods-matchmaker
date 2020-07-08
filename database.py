@@ -16,15 +16,16 @@ myConnection = psycopg2.connect(
 )
 
 
-def read_query(connection, query):
+def read_query(connection, query, do_return=True):
     cursor = connection.cursor()
     print(query)
     try:
         cursor.execute(query)
         connection.commit()
-        names = [x[0] for x in cursor.description]
-        rows = cursor.fetchall()
-        return pd.DataFrame(rows, columns=names)
+        if do_return:
+            names = [x[0] for x in cursor.description]
+            rows = cursor.fetchall()
+            return pd.DataFrame(rows, columns=names)
     except psycopg2.Error as e:
         print(e)
         return {
@@ -55,8 +56,9 @@ def get_found(foundID):
 
 
 def insert_match_table(score, lostID, foundID):
-    return read_query(
+    read_query(
         myConnection,
         "INSERT INTO match ( lostid, foundid, score, new) VALUES (%s, %s, %s, true);"
         % (lostID, foundID, score),
+        do_return=False,
     )
