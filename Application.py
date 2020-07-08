@@ -46,8 +46,10 @@ def query_example():
 
 @app.route("/actions", methods=["POST"])
 def actions():
-    title = request.args.get("title", "")
-    return "hei"
+    title = request.args.get("title")
+    if not title:
+        return "funket ikke"
+    return title + "title"
 
 
 @app.errorhandler(400)
