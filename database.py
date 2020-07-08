@@ -25,6 +25,12 @@ def read_query(connection, query):
         names = [x[0] for x in cursor.description]
         rows = cursor.fetchall()
         return pd.DataFrame(rows, columns=names)
+    except psycopg2.Error as e:
+        print(e)
+        return {
+            "status": "error",
+            "errorMessage": "Unknown database error",
+        }
     finally:
         if cursor is not None:
             cursor.close()

@@ -1,10 +1,7 @@
-from flask import Flask
-import exception_handling
 import database
 import MatchingFromDB
-import Mathing
-
 from flask import render_template
+from flask import Flask, request
 
 app = Flask(
     __name__,
@@ -35,10 +32,25 @@ def get_found():
     return database.get_found(4).to_json()
 
 
+@app.route("/query-example")
+def query_example():
+    language = request.args.get("language")  # if key doesn't exist, returns None
+
+    return """<h1>The language value is: {}</h1>""".format(language)
+
+
+@app.route("/actions", methods=["POST"])
+def actions():
+    title = request.args.get("title")
+    if not title:
+        return "funket ikke"
+    return title + "title"
+
+
 @app.errorhandler(400)
 def handle_bad_request(error):
     data = {"status": "error", "errormessage ": error}
-    return render_template("404.html", error=error), 404, data
+    return render_template("400.html", error=error), 404, data
 
 
 @app.errorhandler(404)
@@ -55,5 +67,4 @@ def internal_error(error):
 
 @app.route("/matching")
 def matchingFromDB():
-
     return MatchingFromDB.matchingDB("found", 1)
