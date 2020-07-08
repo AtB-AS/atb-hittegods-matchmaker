@@ -1,1 +1,1 @@
-gunicorn --certfile cert.pem --keyfile key.pem --bind=0.0.0.0:8000  --workers=4 Application:app
+gunicorn --bind=0.0.0.0 --workers=4 Application:app
