@@ -1,1 +1,1 @@
-catid,subcatid,brand,date,lineid,colorid
+catid,subcatid,brand,date,lineid,colorid,description
