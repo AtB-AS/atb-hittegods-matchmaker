@@ -3,7 +3,6 @@ import MatchingFromDB
 from flask import render_template
 from flask import Flask, request
 from flask import jsonify
-import json
 
 app = Flask(
     __name__,
@@ -17,26 +16,11 @@ def root():
     return "Melk"
 
 
-@app.route("/lost/<lost_id_refnr>")
-def lost(lost_id_refnr):
-
-    lost_id = database.get_lost_row_refnr(str(lost_id_refnr))
-    lost = int(lost_id["lostid"].iloc[0])
-
-    print("json : ")
-    print(type(lost))
-    print("number2 : ")
-    print(lost)
-    MatchingFromDB.matchingDB("lost", lost)
-    # print("test-lost : " + lost_id.to_string)
-    # print("lost2 : " + lost_id)
-
-    # print("lost id : " + json.dumps(lost_id))
-
-    # lost_id = int(lost_id.split("\n")[0])
-
-    # print(MatchingFromDB.matchingDB("lost", lost_id))
-    return str(lost)
+@app.route("/lost/<lost_id>")
+def lost(lost_id):
+    lostid = int(lost_id.split("\n")[0])
+    print(MatchingFromDB.matchingDB("lost", lostid))
+    return "funket"
 
 
 @app.route("/found/<found_id>")
