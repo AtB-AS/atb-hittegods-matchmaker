@@ -11,22 +11,20 @@ import math
 from collections import OrderedDict
 from operator import itemgetter
 import columns
+import compare
 
 
 #TODO forskjellig vekting for positiv og negativ correlation
 
 
 
-def compareEntry(x,y):
-    if(x==y):
-        return 1
-    else:
-        return 0
+def compareEntry(x,y,label):
+    return compare.compare(x, y, label)
     
-def compareEntries(x1,x2):
+def compareEntries(x1,x2,labels):
     values=[]
     for i in range(len(x1)):
-        values.append(compareEntry(x1[i],x2[i]))
+        values.append(compareEntry(x1[i],x2[i],labels[i]))
     
     return values
 
@@ -86,7 +84,9 @@ def findBestMatches(s,ref,n,plot=False):
     return [bestMatches,bestS]
     
 def lostOrFound(df):
-
+    
+    print(type(df))
+    
     if('lostid' in list(df.columns)):
         return 'lost'
     elif('foundid' in list(df.columns)):
@@ -99,9 +99,14 @@ def Matching(x_df,data,n):
 
     x_type=lostOrFound(x_df)
     y_type=lostOrFound(data)
-
+    
+    print(x_type,y_type)
+    
     s=[]
     ref=[]
+    
+    valueNames=columns.getValueLabels()
+    
     
     x=columns.getRowValues(0,x_df,x_type)
     x_ref=x[0]
@@ -121,7 +126,7 @@ def Matching(x_df,data,n):
         y_values=y
         y_values.remove(y_ref)
         print(y_values)
-        s.append(round(calculateSimilarity(weights,compareEntries(x_values,y_values)),3))
+        s.append(round(calculateSimilarity(weights,compareEntries(x_values,y_values,valueNames)),3))
         ref.append(y_ref)
         
     

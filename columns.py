@@ -12,9 +12,16 @@ def getColumnLabels(lost=False,found=False):
     file.close()
     return labels
 
+def getValueLabels():
 
-def getRowValues(i,df,type):
-    if(type=='lost'):
+    file = open('Constants/columnLabels.txt', 'r')
+    labels=file.readline().split(',')
+    file.close()
+    return labels
+
+
+def getRowValues(i,df,theType):
+    if(theType=='lost'):
         labels = getColumnLabels(lost=True)
     else:
         labels = getColumnLabels(found=True)
