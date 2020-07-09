@@ -51,7 +51,7 @@ def calculateSimilarity(weights,values):
     return s
     
 def getWeights():
-    weights=[1,1,1,1,1,1]
+    weights=[1,1,1,1,1,1,1]
     return weights
 
 def getDataFrame(fileLocation):
