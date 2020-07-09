@@ -1,0 +1,33 @@
+catid	subcatid	brand	date	lineid	colorid	description
+W(+|+)
+1	1	1	1	1	1	1	catid
+1	1	1	1	1	1	1	subcatid
+1	1	1	1	1	1	1	brand
+1	1	1	1	1	1	1	date
+1	1	1	1	1	1	1	lineid
+1	1	1	1	1	1	1	colorid
+1	1	1	1	1	1	1	description
+W(+|-)
+1	1	1	1	1	1	1	catid
+1	1	1	1	1	1	1	subcatid
+1	1	1	1	1	1	1	brand
+1	1	1	1	1	1	1	date
+1	1	1	1	1	1	1	lineid
+1	1	1	1	1	1	1	colorid
+1	1	1	1	1	1	1	description
+W(-|+)
+1	1	1	1	1	1	1	catid
+1	1	1	1	1	1	1	subcatid
+1	1	1	1	1	1	1	brand
+1	1	1	1	1	1	1	date
+1	1	1	1	1	1	1	lineid
+1	1	1	1	1	1	1	colorid
+1	1	1	1	1	1	1	description
+W(-|-)
+1	1	1	1	1	1	1	catid
+1	1	1	1	1	1	1	subcatid
+1	1	1	1	1	1	1	brand
+1	1	1	1	1	1	1	date
+1	1	1	1	1	1	1	lineid
+1	1	1	1	1	1	1	colorid
+1	1	1	1	1	1	1	description
