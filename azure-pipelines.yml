@@ -8,8 +8,9 @@ trigger:
 
 variables:
   # Azure Resource Manager connection created during pipeline creation
-  azureServiceConnectionId: '592ff9f9-11fc-4042-b4ec-3c9bdc6ba896'
-  
+  #azureServiceConnectionId: '592ff9f9-11fc-4042-b4ec-3c9bdc6ba896'
+  azureServiceConnection: '268fecca-d74a-44a2-8712-34c19828082d'
+
   # Web app name
   webAppName: 'hittegods-matchmaker'
 
@@ -21,7 +22,7 @@ variables:
 
   # Project root folder. Point to the folder containing manage.py file.
   projectRoot: $(System.DefaultWorkingDirectory)
-  
+
   # Python version: 3.7
   pythonVersion: '3.7'
 
@@ -37,7 +38,7 @@ stages:
       inputs:
         versionSpec: '$(pythonVersion)'
       displayName: 'Use Python $(pythonVersion)'
-    
+
     - script: |
         python -m venv antenv
         source antenv/bin/activate
@@ -73,7 +74,7 @@ stages:
       runOnce:
         deploy:
           steps:
-          
+
           - task: UsePythonVersion@0
             inputs:
               versionSpec: '$(pythonVersion)'
@@ -82,6 +83,6 @@ stages:
           - task: AzureWebApp@1
             displayName: 'Deploy Azure Web App : hittegods-matchmaker'
             inputs:
-              azureSubscription: $(azureServiceConnectionId)
+              azureSubscription: $(azureServiceConnection)
               appName: $(webAppName)
               package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
