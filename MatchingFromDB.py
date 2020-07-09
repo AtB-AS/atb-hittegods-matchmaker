@@ -26,4 +26,5 @@ def matchingDB(x_type, x_id):
         elif x_type == "lost":
             database.insert_match_table(values[2], values[0], values[1])
 
+    print(str(list(bestMatches)))
     return str(list(bestMatches))
