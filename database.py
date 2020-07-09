@@ -49,6 +49,12 @@ def get_lost(lostID):
     return read_query(myConnection, "select * from lost where lostid = %s;" % (lostID))
 
 
+def get_lost_row_refnr(refnr):
+    return read_query(
+        myConnection, "select lostid from lost where refnr = '" + refnr + "';",
+    )
+
+
 def get_found(foundID):
     return read_query(
         myConnection, "select * from found where foundid = %s;" % (foundID)
