@@ -1,0 +1,6 @@
+foundid	catid	subcatid	brand	date	lineid	colorid	description
+1	1	1	bose	21/06/2020	1	1	iufea feuahf fj logkjt anior
+2	2	2	hm	22/06/2020	2,3,4,9	2	fe effkle ofp ikolenf ikean
+3	3	3	Apple	23/06/2020	3,43	3	e elof eflø flø
+4	4	4	iPhone	24/06/2020	4	5	fekl kfe kle  alekane pe eao
+5		5	Samsung	25/06/2020	5,11	6	sad irgo he uya uyfo

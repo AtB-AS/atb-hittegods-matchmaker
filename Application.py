@@ -1,59 +1,47 @@
-from flask import Flask
-import exception_handling
-import database
 import MatchingFromDB
-import Mathing
+from flask import Flask
+import logging
 
-from flask import render_template
-
-app = Flask(
-    __name__,
-    template_folder="exception_handling/templates",
-    static_folder="exception_handling/static",
-)
-
+app = Flask(__name__)
+logger = logging.getLogger(__name__)
 
 @app.route("/")
 def root():
-    return database.get_all_lost().to_json()
+    return "**Hittegods-Matchmaker**"
 
 
-@app.route("/get_score")
-def get_score():
-    database.myConnection.rollback()
-    return database.get_lost("42f8f207-c09a-4b03-8281-726a73b8094").to_json()
+@app.route("/lost/<lost_id>")
+def lost(lost_id):
+    try:
+        lost_id_to_db = int(lost_id.split("\n")[0])
+        print(lost_id_to_db)
+        MatchingFromDB.matchingDB("lost", lost_id_to_db)
+        return "success"
+    except:
+        logger.warning("invalid value for lostid")
+        return "invalid value for lostid"
 
 
-@app.route("/name")
-def insert_to_database():
-    database.insert_match_table(4, 2, 3)
-    return "inserted"
-
-
-@app.route("/get_found")
-def get_found():
-    return database.get_found(4).to_json()
+@app.route("/found/<found_id>")
+def found(found_id):
+    try:
+        found_id_to_db = int(found_id.split("\n")[0])
+        MatchingFromDB.matchingDB("found", found_id_to_db)
+        return "success"
+    except:
+        return "invalid value for foundid"
 
 
 @app.errorhandler(400)
 def handle_bad_request(error):
-    data = {"status": "error", "errormessage ": error}
-    return render_template("404.html", error=error), 404, data
+    return "400 error", 400
 
 
 @app.errorhandler(404)
 def not_found_error(error):
-    data = {"status": "error", "errormessage ": error}
-    return render_template("404.html", error=error), 404, data
+    return "404 error", 404
 
 
 @app.errorhandler(500)
 def internal_error(error):
-    data = {"status": "error", "errormessage ": error}
-    return render_template("500.html", error=error), 500, data
-
-
-@app.route("/matching")
-def matchingFromDB():
-
-    return MatchingFromDB.matchingDB("found", 1)
+    return "500 error", 500

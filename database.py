@@ -3,6 +3,7 @@ from os.path import join, dirname
 from dotenv import load_dotenv
 import psycopg2
 import pandas as pd
+from psycopg2 import OperationalError
 
 dotenv_path = join(dirname(__file__), ".env")
 load_dotenv(dotenv_path)
@@ -11,20 +12,30 @@ hostname = os.environ.get("DB_HOST")
 username = os.environ.get("DB_USER")
 password = os.environ.get("DB_PASSWORD")
 database = os.environ.get("DB_NAME")
-myConnection = psycopg2.connect(
-    host=hostname, user=username, password=password, dbname=database
-)
+
+try:
+    myConnection = psycopg2.connect(
+        host=hostname, user=username, password=password, dbname=database
+    )
+    print("SQL connection is opened")
+except OperationalError as err:
+    print(err)
+    myConnection = None
 
 
-def read_query(connection, query):
+def read_query(connection, query, do_return=True):
     cursor = connection.cursor()
     print(query)
     try:
         cursor.execute(query)
         connection.commit()
-        names = [x[0] for x in cursor.description]
-        rows = cursor.fetchall()
-        return pd.DataFrame(rows, columns=names)
+        if do_return:
+            element_id = [x[0] for x in cursor.description]
+            rows = cursor.fetchall()
+            return pd.DataFrame(rows, columns=element_id)
+    except psycopg2.Error as e:
+        print(e)
+        return "An exception has occured: %s" % e
     finally:
         if cursor is not None:
             cursor.close()
@@ -49,8 +60,9 @@ def get_found(foundID):
 
 
 def insert_match_table(score, lostID, foundID):
-    return read_query(
+    read_query(
         myConnection,
         "INSERT INTO match ( lostid, foundid, score, new) VALUES (%s, %s, %s, true);"
         % (lostID, foundID, score),
+        do_return=False,
     )
