@@ -7,38 +7,45 @@ Created on Wed Jul  8 14:41:35 2020
 
 import datetime
 import math
+import numpy as np
 
 def compare(x,y,label):
     
     #TODO what if x or y is none?
     
     if(label=='catid' or label =='subcatid' or label=='colorid'):
-        if(checkType(x,y,int)):
+        if(str(x).isdigit() and str(y).isdigit()):
             return compareID(x,y)
     
     elif(label=='lineid'):
-        if(checkType(x,y,str)):
+        if(str(x).isdigit()):
+            x=str(x)
+        if(str(y).isdigit()):
+            y=str(y)
+        
+        
+        if(checkType(x,y,str,label)):
             return compareLine(x,y)
     
     elif(label=='brand'):
-        if(checkType(x,y,str)):
+        if(checkType(x,y,str,label)):
             return compareBrand(x,y)
     
     elif(label=='date'):
-        if(checkType(x,y,datetime.date)):
+        if(checkType(x,y,datetime.date,label)):
             return compareDate(x,y)
         
     elif(label=='description'):
-        if(checkType(x,y,str)):
+        if(checkType(x,y,str,label)):
             return compareDescription(x,y)
     
     return 0
 
-def checkType(x,y,theType):
+def checkType(x,y,theType,label):
     if(type(x)==theType and type(y)==theType and x!=None):
         return True
     else:
-        print("wrong type")
+        print("wrong type"+str(type(x))+str(type(y))+" for "+label)
         return False
 
 
