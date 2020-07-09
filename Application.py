@@ -1,14 +1,7 @@
-import database
 import MatchingFromDB
-from flask import render_template
-from flask import Flask, request
-from flask import jsonify
+from flask import Flask
 
-app = Flask(
-    __name__,
-    template_folder="exception_handling/templates",
-    static_folder="exception_handling/static",
-)
+app = Flask(__name__)
 
 
 @app.route("/")
@@ -18,31 +11,34 @@ def root():
 
 @app.route("/lost/<lost_id>")
 def lost(lost_id):
-    lostid = int(lost_id.split("\n")[0])
-    print(MatchingFromDB.matchingDB("lost", lostid))
-    return "funket"
+    try:
+        lost_id_to_db = int(lost_id.split("\n")[0])
+        MatchingFromDB.matchingDB("lost", lost_id_to_db)
+        return "success"
+    except:
+        return "invalid value for lostid"
 
 
 @app.route("/found/<found_id>")
 def found(found_id):
-    foundid = int(found_id.split("\n")[0])
-    print(MatchingFromDB.matchingDB("found", foundid))
-    return "funket"
+    try:
+        found_id_to_db = int(found_id.split("\n")[0])
+        MatchingFromDB.matchingDB("found", found_id_to_db)
+        return "success"
+    except:
+        return "invalid value for foundid"
 
 
 @app.errorhandler(400)
 def handle_bad_request(error):
-    data = {"status": "error", "errormessage ": error}
-    return data, 400
+    return "500 error", 400
 
 
 @app.errorhandler(404)
 def not_found_error(error):
-    data = {"status": "error", "errormessage ": error}
-    return data, 404
+    return "404 error", 404
 
 
 @app.errorhandler(500)
 def internal_error(error):
-    data = {"status": "error", "errormessage ": error}
-    return data, 500
+    return "500 error", 500
