@@ -12,8 +12,7 @@ def root():
 @app.route("/lost/<lost_id>")
 def lost(lost_id):
     try:
-        if "\n" in lost_id:
-            lost_id_to_db = int(lost_id.split("\n")[0])
+        lost_id_to_db = int(lost_id.split("\n")[0])
         print(lost_id_to_db)
         MatchingFromDB.matchingDB("lost", lost_id_to_db)
         return "success"
