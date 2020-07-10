@@ -12,6 +12,7 @@ from collections import OrderedDict
 from operator import itemgetter
 import columns
 import compare
+import Weights
 
 
 #TODO forskjellig vekting for positiv og negativ correlation
@@ -28,7 +29,7 @@ def compareEntries(x1,x2,labels):
     
     return values
 
-def applyWights(weights,values):
+def applyWeights(weights,values):
     weightedValues=[]
     for i in range(len(values)):
         weightedValues.append(weights[i]*values[i])
@@ -36,23 +37,22 @@ def applyWights(weights,values):
         
 
 
-def calculateSimilarity(weights,values):
+def calculateSimilarity(weightMatrix,values):
     
-    values=applyWights(weights, values)
+    weights=Weights.calculateWeights(values, weightMatrix)
+    
+    values=applyWeights(weights, values)
 
     top=0
     bottom=0
     for i in range(len(values)):
         top+=values[i]
-        bottom+=weights[i]
+        bottom+=max(weights[i],values[i]*weights[i])
     
     s=(top)/bottom
     
     return s
-    
-def getWeights():
-    weights=[1,1,1,1,1,1,1]
-    return weights
+
 
 def getDataFrame(fileLocation):
     datafile=open(fileLocation,'r')
@@ -95,7 +95,7 @@ def lostOrFound(df):
         return None
 
 def Matching(x_df,data,n):
-    weights=getWeights()
+    weightMatrix=Weights.getWeightMatrix()
 
     x_type=lostOrFound(x_df)
     y_type=lostOrFound(data)
@@ -126,7 +126,7 @@ def Matching(x_df,data,n):
         y_values=y
         y_values.remove(y_ref)
         print(y_values)
-        s.append(round(calculateSimilarity(weights,compareEntries(x_values,y_values,valueNames)),3))
+        s.append(round(calculateSimilarity(weightMatrix,compareEntries(x_values,y_values,valueNames)),3))
         ref.append(y_ref)
         
     
