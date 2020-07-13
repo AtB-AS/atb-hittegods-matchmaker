@@ -74,7 +74,7 @@ def compareDate(x, y):
     if timedelta < 3:
         return 1
 
-    return 1 / timedelta
+    return 2 / timedelta
 
 
 def compareID(x, y):
