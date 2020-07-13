@@ -1,12 +1,13 @@
 import MatchingFromDB
 from flask import Flask
+import logging
 
 app = Flask(__name__)
-
+logger = logging.getLogger(__name__)
 
 @app.route("/")
 def root():
-    return ""
+    return "**Hittegods-Matchmaker**"
 
 
 @app.route("/lost/<lost_id>")
@@ -17,6 +18,7 @@ def lost(lost_id):
         MatchingFromDB.matchingDB("lost", lost_id_to_db)
         return "success"
     except:
+        logger.warning("invalid value for lostid")
         return "invalid value for lostid"
 
 
@@ -32,7 +34,7 @@ def found(found_id):
 
 @app.errorhandler(400)
 def handle_bad_request(error):
-    return "500 error", 400
+    return "400 error", 400
 
 
 @app.errorhandler(404)

@@ -8,7 +8,7 @@ trigger:
 
 variables:
   # Azure Resource Manager connection created during pipeline creation
-  azureServiceConnectionId: '592ff9f9-11fc-4042-b4ec-3c9bdc6ba896'
+  azureServiceConnectionId: '0f59383d-e8b7-4e7f-97d3-732abc2ecf3d'
   
   # Web app name
   webAppName: 'hittegods-matchmaker'
