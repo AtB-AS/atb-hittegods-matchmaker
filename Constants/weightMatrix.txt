@@ -20,7 +20,7 @@ W(-|+)
 1	1	1	1	1	1	1	subcatid
 1	1	1	1	1	1	1	brand
 1	1	1	1	1	1	1	date
-1	1	1	1	1	1	1	lineid
+1	1	1	1	0.1	1	1	lineid
 1	1	1	1	1	1	1	colorid
 1	1	1	1	1	1	1	description
 W(-|-)
@@ -28,6 +28,6 @@ W(-|-)
 1	1	1	1	1	1	1	subcatid
 1	1	1	1	1	1	1	brand
 1	1	1	-5	1	1	1	date
-1	1	1	1	1	1	1	lineid
+1	1	1	1	0.1	1	1	lineid
 1	1	1	1	1	1	1	colorid
 1	1	1	1	1	1	1	description

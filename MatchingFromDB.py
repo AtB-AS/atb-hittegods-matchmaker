@@ -21,7 +21,7 @@ def matchingDB(x_type, x_id):
     for match in bestMatches:
         values = list(match.values())
         print("**** looop *****")
-        if(values[2]>0.7):
+        if(values[2]>0.55):
             if x_type == "found":
                 database.insert_match_table(values[2], values[1], values[0])
             elif x_type == "lost":
