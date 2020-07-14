@@ -13,13 +13,18 @@ def root():
 @app.route("/lost/<lost_id>")
 def lost(lost_id):
     try:
-        lost_id_to_db = int(lost_id.split("\n")[0])
+        if("\n" in lost_id):
+            lost_id_to_db = int(lost_id.split("\n")[0])
+        else:
+            lost_id_to_db = int(lost_id)
+
         print(lost_id_to_db)
         MatchingFromDB.matchingDB("lost", lost_id_to_db)
         return "success"
-    except:
-        logger.warning("invalid value for lostid")
-        return "invalid value for lostid"
+    except Exception as e:
+        logger.warning(e)
+        print(e)
+        return str(e)
 
 
 @app.route("/found/<found_id>")
@@ -28,8 +33,10 @@ def found(found_id):
         found_id_to_db = int(found_id.split("\n")[0])
         MatchingFromDB.matchingDB("found", found_id_to_db)
         return "success"
-    except:
-        return "invalid value for foundid"
+    except Exception as e:
+        logger.warning(e)
+        print(e)
+        return str(e)
 
 
 @app.errorhandler(400)

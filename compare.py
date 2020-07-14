@@ -28,7 +28,7 @@ def compare(x, y, label):
             return compareLine(x, y)
 
     elif label == "brand":
-        if checkType(x, y, str, label):
+        if checkType(x, y, str, label) and max(len(x),len(y))>0:
             return compareBrand(x, y)
 
     elif label == "date":
@@ -36,7 +36,7 @@ def compare(x, y, label):
             return compareDate(x, y)
 
     elif label == "description":
-        if checkType(x, y, str, label):
+        if checkType(x, y, str, label) and max(len(x),len(y))>0:
             return compareDescription(x, y)
 
     return 0
@@ -137,18 +137,23 @@ def splitWords(x, delimeters):
 
 
 def compareCharArray(x, y):
-
-    sameChar = 0
-    x = x.lower()
-    y = y.lower()
-    x_arr = list(x)
-    y_arr = list(y)
-
-    for char_x in x_arr:
-        if char_x.isdigit():
-            continue
-        for char_y in y_arr:
-            if char_x == char_y:
-                sameChar += 1
-
-    return sameChar / max([len(x_arr), len(y_arr)])
+    
+    if(x=='' or y==''):
+        return 0
+    else:
+        sameChar = 0
+        x = x.lower()
+        y = y.lower()
+        x_arr = list(x)
+        y_arr = list(y)
+    
+        for char_x in x_arr:
+            if char_x.isdigit():
+                continue
+            for char_y in y_arr:
+                if char_y.isdigit():
+                    continue
+                elif char_x == char_y:
+                    sameChar += 1
+    
+        return sameChar / max([len(x_arr), len(y_arr)])

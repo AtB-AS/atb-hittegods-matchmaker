@@ -29,13 +29,17 @@ def read_query(connection, query, do_return=True):
     try:
         cursor.execute(query)
         connection.commit()
+        connection.rollback()
         if do_return:
             element_id = [x[0] for x in cursor.description]
             rows = cursor.fetchall()
+            print(pd.DataFrame(rows, columns=element_id))
             return pd.DataFrame(rows, columns=element_id)
     except psycopg2.Error as e:
         print(e)
-        return "An exception has occured: %s" % e
+    except psycopg2.DatabaseError:
+        connection.rollback()
+
     finally:
         if cursor is not None:
             cursor.close()

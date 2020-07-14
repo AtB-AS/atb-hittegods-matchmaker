@@ -16,11 +16,11 @@ def matchingDB(x_type, x_id):
     if nMatches > len(data):
         nMatches = len(data)
 
+
     bestMatches = Mathing.doMatching(x, data, nMatches)
 
     for match in bestMatches:
         values = list(match.values())
-        print("**** looop *****")
         if(values[2]>0.55):
             if x_type == "found":
                 database.insert_match_table(values[2], values[1], values[0])

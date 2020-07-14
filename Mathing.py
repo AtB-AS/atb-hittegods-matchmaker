@@ -60,8 +60,6 @@ def getDataFrame(fileLocation):
     return df
 
 
-
-
 def findBestMatches(s,ref,n,plot=False):
     
     refS={ref[i]:s[i] for i in range(len(ref))}
@@ -85,8 +83,6 @@ def findBestMatches(s,ref,n,plot=False):
     
 def lostOrFound(df):
     
-    print(type(df))
-    
     if('lostid' in list(df.columns)):
         return 'lost'
     elif('foundid' in list(df.columns)):
@@ -100,8 +96,6 @@ def Matching(x_df,data,n):
     x_type=lostOrFound(x_df)
     y_type=lostOrFound(data)
     
-    print(x_type,y_type)
-    
     s=[]
     ref=[]
     
@@ -113,25 +107,26 @@ def Matching(x_df,data,n):
     x_values=x
     x_values.remove(x_ref)
 
+    print("here")
 
     for i in range(len(data)):
         #dont compare ref num??
 
-
-
         y=columns.getRowValues(i,data,y_type)
-        print(x_values)
 
         y_ref=y[0]
         y_values=y
         y_values.remove(y_ref)
-        print(y_values)
-        s.append(round(calculateSimilarity(weightMatrix,compareEntries(x_values,y_values,valueNames)),3))
-        ref.append(y_ref)
+        try:
+            s.append(round(calculateSimilarity(weightMatrix,compareEntries(x_values,y_values,valueNames)),3))
+            ref.append(y_ref)
+        except Exception as e:
+            print(e)
+
         
     
     [bestMatches,bestS]=findBestMatches(s, ref, n, plot=False)
-    
+
     matches=[]
     for i in range(0, len(bestMatches)):
         matches.append({'ID_1':x_ref,'ID_2':bestMatches[i],'score':bestS[i]})    
@@ -150,10 +145,3 @@ def doMatching(x, data, n):
 
     matches=Matching(x,data,n)
     return matches
-
-
-
-
-
-
-
