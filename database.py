@@ -46,11 +46,11 @@ def read_query(connection, query, do_return=True):
 
 
 def get_all_lost():
-    return read_query(myConnection, "select * from lost;")
+    return read_query(myConnection, "select * from lost join status on lost.statusid=status.statusid where status='Mistet';")
 
 
 def get_all_found():
-    return read_query(myConnection, "select * from found;")
+    return read_query(myConnection, "select * from found join status on found.statusid=status.statusid where status='Funnet'  or status='På vei';")
 
 
 def get_lost(lostID):
