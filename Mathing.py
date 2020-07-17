@@ -87,14 +87,8 @@ def Matching(x_df,data,n):
     x_type=lostOrFound(x_df)
     y_type=lostOrFound(data)
 
-    print(list(x_df.columns))
-    print(list(data.columns))
-
     x_df=columns.renameContactColumns(x_df)
     data=columns.renameContactColumns(data)
-
-    print(list(x_df.columns))
-    print(list(data.columns))
 
     s=[]
     ref=[]
@@ -103,8 +97,6 @@ def Matching(x_df,data,n):
     x_ref=x[0]
     x_values=x
     x_values.remove(x_ref)
-
-    print("here")
 
 
 

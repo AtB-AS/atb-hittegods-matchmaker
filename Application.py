@@ -18,7 +18,7 @@ def lost(lost_id):
         else:
             lost_id_to_db = int(lost_id)
 
-        print(lost_id_to_db)
+
         MatchingFromDB.matchingDB("lost", lost_id_to_db)
         return "success"
     except Exception as e:

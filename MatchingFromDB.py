@@ -29,5 +29,4 @@ def matchingDB(x_type, x_id):
         else:
             print("Score too low, not sent to DB")
 
-    print(str(list(bestMatches)))
     return str(list(bestMatches))

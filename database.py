@@ -25,7 +25,6 @@ except OperationalError as err:
 
 def read_query(connection, query, do_return=True):
     cursor = connection.cursor()
-    print(query)
     try:
         cursor.execute(query)
         connection.commit()
@@ -33,7 +32,6 @@ def read_query(connection, query, do_return=True):
         if do_return:
             element_id = [x[0] for x in cursor.description]
             rows = cursor.fetchall()
-            print(pd.DataFrame(rows, columns=element_id))
             return pd.DataFrame(rows, columns=element_id)
     except psycopg2.Error as e:
         print(e)
