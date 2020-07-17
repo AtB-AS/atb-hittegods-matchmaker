@@ -18,6 +18,15 @@ def compare(x, y, label):
         if str(x).isdigit() and str(y).isdigit():
             return compareID(x, y)
 
+    elif label == 'phone':
+        if str(x).isdigit() and str(x).isdigit() and min(len(x),len(y))>0:
+            return comparePhone(x,y)
+
+    elif label == 'email':
+        if checkType(x,y,str,label) and '@' in x and '@' in y and  min(len(x),len(y))>0:
+            return compareEmail(x,y)
+
+
     elif label == "lineid":
         if str(x).isdigit():
             x = str(x)
@@ -27,8 +36,8 @@ def compare(x, y, label):
         if checkType(x, y, str, label):
             return compareLine(x, y)
 
-    elif label == "brand":
-        if checkType(x, y, str, label) and max(len(x),len(y))>0:
+    elif label == "brand" or label == 'name':
+        if checkType(x, y, str, label) and min(len(x),len(y))>0:
             return compareBrand(x, y)
 
     elif label == "date":
@@ -36,7 +45,7 @@ def compare(x, y, label):
             return compareDate(x, y)
 
     elif label == "description":
-        if checkType(x, y, str, label) and max(len(x),len(y))>0:
+        if checkType(x, y, str, label) and min(len(x),len(y))>0:
             return compareDescription(x, y)
 
     return 0
@@ -59,6 +68,21 @@ def compareDescription(x, y):
     similarity = (sameWord / math.log(1 + N)) ** (abs(math.log(N / 2)))
 
     return similarity
+
+
+def comparePhone(x,y):
+
+    if (x in y or y in x) and (min(len(x), len(y)) > 0.7*max(len(x), len(y))):
+        return 1
+    else:
+        return 0
+
+
+def compareEmail(x,y):
+    if (x in y or y in x) and (min(len(x), len(y)) > 0.7*max(len(x), len(y))):
+        return 1
+    else:
+        return 0
 
 
 def compareDate(x, y):

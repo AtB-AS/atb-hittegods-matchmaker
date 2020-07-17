@@ -31,3 +31,18 @@ def getRowValues(i, df, theType):
     for label in labels:
         values.append(df.loc[i, label])
     return values
+
+
+def renameContactColumns(df):
+    #renameDict={"nameonitem": "name", "phonenumberonitem": "phone", "emailonitem": "email"}
+    columnNames=list(df.columns)
+    for i in range(len(columnNames)):
+        if columnNames[i]=='nameonitem':
+            columnNames[i]='name'
+        elif columnNames[i]=='phonenumberonitem':
+            columnNames[i]='phone'
+        elif columnNames[i]=='emailonitem':
+            columnNames[i]='email'
+
+    df.columns=columnNames
+    return df

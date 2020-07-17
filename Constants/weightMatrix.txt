@@ -1,33 +1,45 @@
-catid	subcatid	brand	date	lineid	colorid	description
+catid	subcatid	brand	date	lineid	colorid	description name    email   phone
 W(+|+)
-1	1	1	1	1	1	1	catid
-1	1	1	1	1	1	1	subcatid
-1	4	1	1	1	1	1	brand
-1	1	1	1	1	1	1	date
-1	1	1	1	1	1	1	lineid
-1	1	1	1	1	1	1	colorid
-1	1	1	1	1	1	1	description
+1	1	1	1	1	1	1	1   1   1   catid
+1	1	1	1	1	1	1	1   1   1   subcatid
+1	4	1	1	1	1	1	1   1   1   brand
+1	1	1	1	1	1	1	1   1   1   date
+1	1	1	1	1	1	1	1   1   1   lineid
+1	1	1	1	1	1	1	1   1   1   colorid
+1	1	1	1	1	1	1	1   1   1   description
+1	1	1	1	1	1	1	10   5   5   name
+1	1	1	1	1	1	1	5   10   5   email
+1	1	1	1	1	1	1	5   5   10   phone
 W(+|-)
-1	1	1	1	1	1	1	catid
-1	1	1	1	1	1	1	subcatid
-1	1	1	1	1	1	1	brand
-1	1	1	1	1	1	1	date
-1	1	1	1	1	1	1	lineid
-1	1	1	1	1	1	1	colorid
-1	1	1	1	1	1	1	description
+1	1	1	1	1	1	1	1   1   1   catid
+1	1	1	1	1	1	1	1   1   1   subcatid
+1	1	1	1	1	1	1	1   1   1   brand
+1	1	1	1	1	1	1	1   1   1   date
+1	1	1	1	0.1	1	1	1   1   1   lineid
+1	1	1	1	1	1	1	1   1   1   colorid
+1	1	1	1	1	1	1	1   1   1   description
+1	1	1	1	1	1	1	1   1   1   name
+1	1	1	1	1	1	1	1   1   1   email
+1	1	1	1	1	1	1	1   1   1   phone
 W(-|+)
-1	1	1	1	1	1	1	catid
-1	1	1	1	1	1	1	subcatid
-1	1	1	1	1	1	1	brand
-1	1	1	1	1	1	1	date
-1	1	1	1	0.1	1	1	lineid
-1	1	1	1	1	1	1	colorid
-1	1	1	1	1	1	1	description
+1	1	1	1	1	1	1	1   1   1   catid
+1	1	1	1	1	1	1	1   1   1   subcatid
+1	1	1	1	1	1	1	1   1   1   brand
+1	1	1	1	1	1	1	1   1   1   date
+1	1	1	1	0.1	1	1	1   1   1   lineid
+1	1	1	1	1	1	1	1   1   1   colorid
+1	1	1	1	1	1	1	1   1   1   description
+1	1	1	1	1	1	1	1   1   1   name
+1	1	1	1	1	1	1	1   1   1   email
+1	1	1	1	1	1	1	1   1   1   phone
 W(-|-)
-1	1	1	1	1	1	1	catid
-1	1	1	1	1	1	1	subcatid
-1	1	1	1	1	1	1	brand
-1	1	1	-5	1	1	1	date
-1	1	1	1	0.1	1	1	lineid
-1	1	1	1	1	1	1	colorid
-1	1	1	1	1	1	1	description
+1	1	1	1	1	1	1	1   1   1   catid
+1	1	1	1	1	1	1	1   1   1   subcatid
+1	1	1	1	1	1	1	1   1   1   brand
+1	1	1	-5	1	1	1	1   1   1   date
+1	1	1	1	0.1	1	1	1   1   1   lineid
+1	1	1	1	1	1	1	1   1   1   colorid
+1	1	1	1	1	1	1	1   1   1   description
+1	1	1	1	1	1	1	0.001   1   1   name
+1	1	1	1	1	1	1	1   0.001   1   email
+1	1	1	1	1	1	1	1   1   0.001   phone

@@ -4,10 +4,8 @@ Created on Thu Jul  2 15:36:15 2020
 
 @author: gauhol
 """
-import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import math
 from collections import OrderedDict
 from operator import itemgetter
 import columns
@@ -15,32 +13,27 @@ import compare
 import Weights
 
 
-#TODO forskjellig vekting for positiv og negativ correlation
-
-
-
 def compareEntry(x,y,label):
     return compare.compare(x, y, label)
-    
+
+
 def compareEntries(x1,x2,labels):
     values=[]
     for i in range(len(x1)):
         values.append(compareEntry(x1[i],x2[i],labels[i]))
-    
     return values
+
 
 def applyWeights(weights,values):
     weightedValues=[]
     for i in range(len(values)):
         weightedValues.append(weights[i]*values[i])
     return weightedValues
-        
 
 
 def calculateSimilarity(weightMatrix,values):
     
     weights=Weights.calculateWeights(values, weightMatrix)
-    
     values=applyWeights(weights, values)
 
     top=0
@@ -49,8 +42,7 @@ def calculateSimilarity(weightMatrix,values):
         top+=values[i]
         bottom+=max(weights[i],values[i]*weights[i])
     
-    s=(top)/bottom
-    
+    s=top/bottom
     return s
 
 
@@ -63,10 +55,7 @@ def getDataFrame(fileLocation):
 def findBestMatches(s,ref,n,plot=False):
     
     refS={ref[i]:s[i] for i in range(len(ref))}
-    
     sortedRefS=OrderedDict(sorted(refS.items(), key = itemgetter(1), reverse = True))
-    
-    
     sortedRef=list(sortedRefS.keys())
     sortedS=list(sortedRefS.values())
     bestMatches=[sortedRef[i] for i in range(n)]
@@ -80,7 +69,8 @@ def findBestMatches(s,ref,n,plot=False):
     
 
     return [bestMatches,bestS]
-    
+
+
 def lostOrFound(df):
     
     if('lostid' in list(df.columns)):
@@ -90,24 +80,33 @@ def lostOrFound(df):
     else:
         return None
 
+
 def Matching(x_df,data,n):
     weightMatrix=Weights.getWeightMatrix()
 
     x_type=lostOrFound(x_df)
     y_type=lostOrFound(data)
-    
+
+    print(list(x_df.columns))
+    print(list(data.columns))
+
+    x_df=columns.renameContactColumns(x_df)
+    data=columns.renameContactColumns(data)
+
+    print(list(x_df.columns))
+    print(list(data.columns))
+
     s=[]
     ref=[]
-    
     valueNames=columns.getValueLabels()
-    
-    
     x=columns.getRowValues(0,x_df,x_type)
     x_ref=x[0]
     x_values=x
     x_values.remove(x_ref)
 
     print("here")
+
+
 
     for i in range(len(data)):
         #dont compare ref num??
@@ -123,8 +122,6 @@ def Matching(x_df,data,n):
         except Exception as e:
             print(e)
 
-        
-    
     [bestMatches,bestS]=findBestMatches(s, ref, n, plot=False)
 
     matches=[]
@@ -140,6 +137,7 @@ def testMatching():
 
     matches=Matching(x,data,5)
     return matches
+
 
 def doMatching(x, data, n):
 

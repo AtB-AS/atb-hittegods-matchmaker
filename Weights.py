@@ -8,10 +8,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def readWeightsFromFile():
-    W_pp=np.loadtxt('Constants/weightMatrix.txt',skiprows=2,max_rows=7,usecols=range(7))
-    W_pn=np.loadtxt('Constants/weightMatrix.txt',skiprows=10,max_rows=7,usecols=range(7))
-    W_np=np.loadtxt('Constants/weightMatrix.txt',skiprows=18,max_rows=7,usecols=range(7))
-    W_nn=np.loadtxt('Constants/weightMatrix.txt',skiprows=26,max_rows=7,usecols=range(7))
+    params=10
+    W_pp=np.loadtxt('Constants/weightMatrix.txt',skiprows=2,max_rows=params,usecols=range(params))
+    W_pn=np.loadtxt('Constants/weightMatrix.txt',skiprows=2+1*(1+params),max_rows=params,usecols=range(params))
+    W_np=np.loadtxt('Constants/weightMatrix.txt',skiprows=2+2*(1+params),max_rows=params,usecols=range(params))
+    W_nn=np.loadtxt('Constants/weightMatrix.txt',skiprows=2+3*(1+params),max_rows=params,usecols=range(params))
 
     return {'W_pp':W_pp,'W_pn':W_pn,'W_np':W_np,'W_nn':W_nn}
 
