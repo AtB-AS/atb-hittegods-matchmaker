@@ -12,16 +12,6 @@ username = os.environ.get("DB_USER")
 password = os.environ.get("DB_PASSWORD")
 database = os.environ.get("DB_NAME")
 
-try:
-    myConnection = psycopg2.connect(
-        host=hostname, user=username, password=password, dbname=database
-    )
-    print("SQL connection is opened")
-except OperationalError as err:
-    print(err)
-    myConnection = None
-
-
 def read_query(query, params=None, do_return=True):
     try:
         connection = psycopg2.connect(
@@ -29,7 +19,6 @@ def read_query(query, params=None, do_return=True):
         )
         cursor = connection.cursor()
         cursor.execute(query, params)
-        print(cursor.query)
         connection.commit()
         if do_return:
             return cursor.fetchall(), cursor.description
@@ -56,25 +45,6 @@ def get_all_found():
 def get_lost(lostID):
     return read_query("select * from lost where lostid = %s;", (lostID,))
 
-def test_query():
-    print("running test query")
-    try:
-        connection = psycopg2.connect(
-            host=hostname, user=username, password=password, dbname=database
-        )
-        cursor = connection.cursor()
-        cursor.execute("select * from found where foundid=200")
-        return cursor.fetchall(), cursor.description
-    except psycopg2.DatabaseError:
-        if connection is not None:
-            connection.rollback()
-    except psycopg2.Error as e:
-        print(e)
-    finally:
-        if cursor is not None:
-            cursor.close()
-        if connection is not None:
-            connection.close()
 
 def get_found(foundID):
     return read_query("select * from found where foundid = %s;", (foundID,))
