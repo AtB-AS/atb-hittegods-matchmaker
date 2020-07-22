@@ -1,6 +1,33 @@
 import database
 import Mathing
+from utils import rowsToDf
 
+
+def foundMatch(foundid):
+    nMatches = 5
+    found, foundDescription = database.get_found(foundid)
+    foundDf = rowsToDf(found, foundDescription)
+
+    lostData, lostDescription = database.get_all_lost()
+    if (lostData is None):
+        raise Exception("Could not get lost data from database")
+    lostDf = rowsToDf(lostData, lostDescription)
+
+    print(database.test_query())
+
+    if nMatches > len(lostData):
+        nMatches = len(lostData)
+
+    bestMatches = Mathing.doMatching(foundDf, lostDf, nMatches)
+
+    for match in bestMatches:
+        values = list(match.values())
+        if (values[2] > 0.55):
+            database.insert_match_table(values[2], values[1], values[0])
+        else:
+            print("Score too low, not sent to DB")
+
+    return str(list(bestMatches))
 
 def matchingDB(x_type, x_id):
 
