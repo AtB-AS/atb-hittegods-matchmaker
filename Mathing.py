@@ -11,6 +11,7 @@ from operator import itemgetter
 import columns
 import compare
 import Weights
+from Match import Match
 
 
 def compareEntry(x,y,label):
@@ -117,9 +118,13 @@ def Matching(x_df,data,n):
     [bestMatches,bestS]=findBestMatches(s, ref, n, plot=False)
 
     matches=[]
+
     for i in range(0, len(bestMatches)):
-        matches.append({'ID_1':x_ref,'ID_2':bestMatches[i],'score':bestS[i]})    
-        
+        if (x_type == "lost"):
+            matches.append(Match(x_ref, bestMatches[i], bestS[i]))
+        else:
+            matches.append(Match(bestMatches[i], x_ref, bestS[i]))
+
     return matches
 
 

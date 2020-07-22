@@ -1,4 +1,4 @@
-import MatchingFromDB
+from MatchingFromDB import foundMatch, lostMatch
 from flask import Flask
 import logging
 
@@ -13,16 +13,11 @@ def root():
 @app.route("/lost/<lost_id>")
 def lost(lost_id):
     try:
-        if("\n" in lost_id):
-            lost_id_to_db = int(lost_id.split("\n")[0])
-        else:
-            lost_id_to_db = int(lost_id)
-
-
-        MatchingFromDB.matchingDB("lost", lost_id_to_db)
+        lostMatch(lost_id)
         return "success"
     except Exception as e:
         logger.warning(e)
+        print("Exception:")
         print(e)
         return str(e)
 
@@ -30,14 +25,11 @@ def lost(lost_id):
 @app.route("/found/<found_id>")
 def found(found_id):
     try:
-        if("\n" in found_id):
-            found_id_to_db = int(found_id.split("\n")[0])
-        else:
-            found_id_to_db = int(found_id)
-        MatchingFromDB.matchingDB("found", found_id_to_db)
+        foundMatch(found_id)
         return "success"
     except Exception as e:
         logger.warning(e)
+        print("Exception:")
         print(e)
         return str(e)
 
