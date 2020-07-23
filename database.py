@@ -18,7 +18,10 @@ def read_query(query, params=None, do_return=True):
             host=hostname, user=username, password=password, dbname=database
         )
         cursor = connection.cursor()
+        print(query)
+        print(params)
         cursor.execute(query, params)
+        print(cursor.query)
         connection.commit()
         if do_return:
             return cursor.fetchall(), cursor.description
@@ -50,8 +53,7 @@ def get_found(foundID):
     return read_query("select * from found where foundid = %s;", (foundID,))
 
 
-def insert_match_table(score, lostID, foundID):
+def insert_match_table(lostID, foundID,score):
     read_query(
-        "INSERT INTO match ( lostid, foundid, score, new) VALUES (%s, %s, %s, true);", (lostID, foundID, score),
-        do_return=False,
-    )
+        "INSERT INTO match ( lostid, foundid, score, new) VALUES (%s, %s, %s, true);", (int(lostID), int(foundID), float(score)),
+        do_return=False)
