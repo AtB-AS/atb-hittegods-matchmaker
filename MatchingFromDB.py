@@ -1,6 +1,10 @@
 import database
-import Mathing
+import Matching
+from dataset import dataset
 from utils import rowsToDf
+
+
+
 
 
 def foundMatch(foundid):
@@ -23,7 +27,10 @@ def foundMatch(foundid):
     if nMatches > len(lostDf):
         nMatches = len(lostDf)
 
-    bestMatches = Mathing.doMatching(foundDf, lostDf, nMatches)
+    foundDataset=dataset('found','single',foundDf)
+    lostDataset=dataset('lost','multiple',lostDf)
+
+    bestMatches = Matching.doMatching(foundDataset, lostDataset, nMatches)
 
     for match in bestMatches:
         if (match.score > 0.55):
@@ -52,7 +59,11 @@ def lostMatch(lostid):
     if nMatches > len(foundDf):
         nMatches = len(foundDf)
 
-    bestMatches = Mathing.doMatching(lostDf, foundDf, nMatches)
+
+    foundDataset=dataset('found','multiple',foundDf)
+    lostDataset=dataset('lost','single',lostDf)
+
+    bestMatches = Matching.doMatching(lostDataset, foundDataset, nMatches)
 
     for match in bestMatches:
         if (match.score > 0.55):

@@ -12,16 +12,62 @@ import columns
 import compare
 import Weights
 from Match import Match
+from Entry import Entry
+from dataset import dataset
+from utils import getDataFrame
+
+def doMatching(x, data, n):
+
+    matches=Matching(x,data,n)
+
+    if x.type == 'found':
+        x.df = columns.renameContactColumns(x.df)
+    else:
+        data.df = columns.renameContactColumns(data.df)
+
+    return matches
+
+
+
+def Matching(x_dataset,y_dataset,n):
+
+    weightMatrix = Weights.getWeightMatrix()
+    valueLabels = columns.getValueLabels()
+
+    x_row = columns.getRowValues(0,x_dataset.df,x_dataset.type)
+    x = Entry(x_row[0],x_row.remove(x_row[0]))
+
+    scores = []
+    y_ids = []
+    for i in range(len(y_dataset)):
+        y_row = columns.getRowValues(i,y_dataset,y_dataset.type)
+        y = Entry(y_row[0],y_row.remove(y_row[0]))
+        try:
+            scores.append(round(calculateSimilarity(weightMatrix,compareEntries(x.values,y.values,valueLabels)),3))
+            y_ids.append(y.id)
+        except Exception as e:
+            print(e)
+
+    [bestMatches, bestScores] = findBestMatches(scores, y_ids, n, plot=False)
+
+    matches = []
+    for i in range(0, len(bestMatches)):
+        if x_dataset.type == "lost":
+            matches.append(Match(x.id, bestMatches[i], bestScores[i]))
+        else:
+            matches.append(Match(bestMatches[i], x.id, bestScores[i]))
+
+    return matches
 
 
 def compareEntry(x,y,label):
     return compare.compare(x, y, label)
 
 
-def compareEntries(x1,x2,labels):
+def compareEntries(x,y,labels):
     values=[]
-    for i in range(len(x1)):
-        values.append(compareEntry(x1[i],x2[i],labels[i]))
+    for i in range(len(x)):
+        values.append(compareEntry(x[i],y[i],labels[i]))
     return values
 
 
@@ -45,13 +91,6 @@ def calculateSimilarity(weightMatrix,values):
     
     s=top/bottom
     return s
-
-
-def getDataFrame(fileLocation):
-    datafile=open(fileLocation,'r')
-    df = pd.read_csv(datafile,sep='\t',skiprows=(0),header=(0))
-    return df
-
 
 def findBestMatches(s,ref,n,plot=False):
     
@@ -80,63 +119,3 @@ def lostOrFound(df):
         return 'found'
     else:
         return None
-
-
-def Matching(x_df,data,n):
-    weightMatrix=Weights.getWeightMatrix()
-
-    x_type=lostOrFound(x_df)
-    y_type=lostOrFound(data)
-
-    x_df=columns.renameContactColumns(x_df)
-    data=columns.renameContactColumns(data)
-
-    s=[]
-    ref=[]
-    valueNames=columns.getValueLabels()
-    x=columns.getRowValues(0,x_df,x_type)
-    x_ref=x[0]
-    x_values=x
-    x_values.remove(x_ref)
-
-
-
-    for i in range(len(data)):
-        #dont compare ref num??
-
-        y=columns.getRowValues(i,data,y_type)
-
-        y_ref=y[0]
-        y_values=y
-        y_values.remove(y_ref)
-        try:
-            s.append(round(calculateSimilarity(weightMatrix,compareEntries(x_values,y_values,valueNames)),3))
-            ref.append(y_ref)
-        except Exception as e:
-            print(e)
-
-    [bestMatches,bestS]=findBestMatches(s, ref, n, plot=False)
-
-    matches=[]
-
-    for i in range(0, len(bestMatches)):
-        if (x_type == "lost"):
-            matches.append(Match(x_ref, bestMatches[i], bestS[i]))
-        else:
-            matches.append(Match(bestMatches[i], x_ref, bestS[i]))
-
-    return matches
-
-
-def testMatching():
-    x=[0,'Elektronikk','Mobil','Svart', 4,'5/1/2020','Bose']
-    data=getDataFrame('Data/random1000.txt')
-
-    matches=Matching(x,data,5)
-    return matches
-
-
-def doMatching(x, data, n):
-
-    matches=Matching(x,data,n)
-    return matches

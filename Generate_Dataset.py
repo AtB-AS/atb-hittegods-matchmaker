@@ -9,14 +9,10 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import random
-import Mathing
+import Matching
 import datetime
 
-
-def getDataFrame(fileLocation):
-    datafile = open(fileLocation, "r")
-    df = pd.read_csv(datafile, sep="\t", skiprows=(0), header=(0))
-    return df
+from utils import getDataFrame
 
 
 def generateRandomDataPoint(df, i):
@@ -96,4 +92,4 @@ def testMatching():
     print(x.head())
     print(type(x))
 
-    Mathing.doMatching(x, dataSet, 5)
+    Matching.doMatching(x, dataSet, 5)
