@@ -1,72 +1,98 @@
 import database
 import Matching
-from dataset import dataset
-from utils import rowsToDf
+from dataset import Dataset
+from utils import rows_to_df
+
+
+"""
+
+These functions does the network calls to get data, calls the matching algorithm function and writes to the match
+relation database
+
+"""
+
+# These functions could possibly have been combined, but it would split the functions in 2 depending on the case
+# Having them separate is mostly equivalent
+
+# //TODO these should catch errors and return something like a status
+
+def found_match(foundid):
+    """
+    gets the data for the found item with the given found id from the DB and matches it against all the data in the
+    lost table in the DB. Then writes the 5 best matches to the match relation table in the DB with the lostid,
+    foundid and score given that the score is higher than a threshold given.
 
 
 
-
-
-def foundMatch(foundid):
-    nMatches = 5
-    found, foundDescription = database.get_found(foundid)
+    :param foundid: found id
+    """
+    n_matches = 5
+    found, found_description = database.get_found(foundid)
     if found is None:
         raise Exception("Cannot find foundid")
 
-    if (len(found) == 0):
+    if len(found) == 0:
         raise Exception("Cannot find foundid")
-    foundDf = rowsToDf(found, foundDescription)
+    found_df = rows_to_df(found, found_description)
 
-    lostData, lostDescription = database.get_all_lost()
-    if (lostData is None):
+    lost_data, lost_description = database.get_all_lost()
+    if lost_data is None:
         raise Exception("Could not get lost data from database")
-    if len(lostData) == 0:
+    if len(lost_data) == 0:
         raise Exception("Could not get lost data from database")
-    lostDf = rowsToDf(lostData, lostDescription)
+    lost_df = rows_to_df(lost_data, lost_description)
 
-    if nMatches > len(lostDf):
-        nMatches = len(lostDf)
+    if n_matches > len(lost_df):
+        n_matches = len(lost_df)
 
-    foundDataset=dataset('found','single',foundDf)
-    lostDataset=dataset('lost','multiple',lostDf)
+    found_dataset=Dataset('found', 'single', found_df)
+    lost_dataset=Dataset('lost', 'multiple', lost_df)
 
-    bestMatches = Matching.doMatching(foundDataset, lostDataset, nMatches)
+    best_matches = Matching.do_matching(found_dataset, lost_dataset, n_matches)
 
-    for match in bestMatches:
-        if (match.score > 0.55):
+    for match in best_matches:
+        if match.score > 0.55:
             database.insert_match_table(match.lostid, match.foundid, match.score)
         else:
             print("Score too low, not sent to DB")
 
-def lostMatch(lostid):
-    nMatches = 5
-    lost, lostDescription = database.get_lost(lostid)
+
+def lost_match(lostid):
+    """
+    gets the data for the lost item with the given lost id from the DB and matches it against all the data in the
+    found table in the DB. Then writes the 5 best matches to the match relation table in the DB with the lostid,
+    foundid and score given that the score is higher than a threshold given.
+
+
+
+    :param lostif: lost id
+    """
+    n_matches = 5
+    lost, lost_description = database.get_lost(lostid)
     if lost is None:
         raise Exception("Cannot find lostid")
 
-    if (len(lost) == 0):
+    if len(lost) == 0:
         raise Exception("Cannot find lostid")
-    lostDf = rowsToDf(lost, lostDescription)
+    lost_df = rows_to_df(lost, lost_description)
 
-    foundData, foundDescription = database.get_all_found()
-    if (foundData is None):
+    found_data, found_description = database.get_all_found()
+    if found_data is None:
         raise Exception("Could not get found data from database")
-    if len(foundData) == 0:
+    if len(found_data) == 0:
         raise Exception("Could not get found data from database")
-    foundDf = rowsToDf(foundData, foundDescription)
+    found_df = rows_to_df(found_data, found_description)
 
+    if n_matches > len(found_df):
+        n_matches = len(found_df)
 
-    if nMatches > len(foundDf):
-        nMatches = len(foundDf)
+    found_dataset = Dataset('found', 'multiple', found_df)
+    lost_dataset = Dataset('lost', 'single', lost_df)
 
-
-    foundDataset=dataset('found','multiple',foundDf)
-    lostDataset=dataset('lost','single',lostDf)
-
-    bestMatches = Matching.doMatching(lostDataset, foundDataset, nMatches)
+    bestMatches = Matching.do_matching(lost_dataset, found_dataset, n_matches)
 
     for match in bestMatches:
-        if (match.score > 0.55):
+        if match.score > 0.55:
             database.insert_match_table(match.lostid, match.foundid, match.score)
         else:
             print("Score too low, not sent to DB")

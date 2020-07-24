@@ -1,7 +1,15 @@
 from csv import reader
 
 
-def getColumnLabels(lost=False, found=False):
+def get_column_labels(lost=False, found=False):
+    """
+    Gets the column names from the ./Constants/columnLables.txt file determining which columns in the datasets are to
+    be compared
+
+    :param lost: True if dataset is lost
+    :param found: True if dataset is found
+    :return: column labels starting with lostid or foundid
+    """
 
     file = open("Constants/columnLabels.txt", "r")
     labels = file.readline().split(",")
@@ -13,7 +21,11 @@ def getColumnLabels(lost=False, found=False):
     return labels
 
 
-def getValueLabels():
+def get_value_labels():
+    """
+    Gets the column names of the values that are compared in the matching from ./Constants/columnLables.txt
+    :return: column names of the values that are compared in the matching
+    """
 
     file = open("Constants/columnLabels.txt", "r")
     labels = file.readline().split(",")
@@ -21,11 +33,20 @@ def getValueLabels():
     return labels
 
 
-def getRowValues(i, df, theType):
-    if theType == "lost":
-        labels = getColumnLabels(lost=True)
+def get_row_values(i, df, type):
+    """
+    Gets the row values to be compared from a pandas dataframe from the row number and column
+    names in ./Constants/columnLables.txt
+
+    :param i: row number
+    :param df: pandas dataframe
+    :param type: whether its lost or found data
+    :return: row values to be compared from this dataframe
+    """
+    if type == "lost":
+        labels = get_column_labels(lost=True)
     else:
-        labels = getColumnLabels(found=True)
+        labels = get_column_labels(found=True)
 
     values = []
     for label in labels:
@@ -33,16 +54,22 @@ def getRowValues(i, df, theType):
     return values
 
 
-def renameContactColumns(df):
-    #renameDict={"nameonitem": "name", "phonenumberonitem": "phone", "emailonitem": "email"}
-    columnNames=list(df.columns)
-    for i in range(len(columnNames)):
-        if columnNames[i]=='nameonitem':
-            columnNames[i]='name'
-        elif columnNames[i]=='phonenumberonitem':
-            columnNames[i]='phone'
-        elif columnNames[i]=='emailonitem':
-            columnNames[i]='email'
+def rename_contact_columns(df):
+    """
+    Renames the contact info columns where they differ in lost and found data so they are the same
 
-    df.columns=columnNames
+    :param df: the pandas dataframe
+    :return: pandas dataframe with correct column names
+    """
+
+    column_names = list(df.columns)
+    for i in range(len(column_names)):
+        if column_names[i] == 'nameonitem':
+            column_names[i] = 'name'
+        elif column_names[i] == 'phonenumberonitem':
+            column_names[i] = 'phone'
+        elif column_names[i] == 'emailonitem':
+            column_names[i] = 'email'
+
+    df.columns = column_names
     return df

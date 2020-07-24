@@ -7,7 +7,14 @@ Created on Thu Jul  9 14:19:56 2020
 import numpy as np
 import matplotlib.pyplot as plt
 
-def readWeightsFromFile():
+def read_weights_from_file():
+    """
+    Reads the 4 weight matrixes from ./Constants/weightMatrix.txt and puts them in dict. Each matrix is a numpy array.
+
+    :return:
+    """
+
+
     params=10
     W_pp=np.loadtxt('Constants/weightMatrix.txt',skiprows=2,max_rows=params,usecols=range(params))
     W_pn=np.loadtxt('Constants/weightMatrix.txt',skiprows=2+1*(1+params),max_rows=params,usecols=range(params))
@@ -17,11 +24,25 @@ def readWeightsFromFile():
     return {'W_pp':W_pp,'W_pn':W_pn,'W_np':W_np,'W_nn':W_nn}
 
 
-def getWeightMatrix():
-    return readWeightsFromFile()
+def get_weight_matrix():
+    """
+    Returns weight matrix
+
+    :return: weight matrix
+    """
+
+    return read_weights_from_file()
 
 
-def calculateWeights(values,weightMatrix):
+def calculate_weights(values, weightMatrix):
+    """
+    Calculates the weight for each similarity value dynamically from the weight matrix
+
+    :param values: comparison similarity values
+    :param weightMatrix: weights matrix
+    :return: list of weights for each value
+    """
+
     k=0.5 #threshold
     N=len(values)
     weights=[]
@@ -42,14 +63,16 @@ def calculateWeights(values,weightMatrix):
     return weights
 
 
-def plotWeights(weightMatrix):
-    plotMat(weightMatrix['W_pp'],'Weight matrix positive | positive')
-    plotMat(weightMatrix['W_pn'],'Weight matrix positive | negative')
-    plotMat(weightMatrix['W_np'],'Weight matrix negative | positive')
-    plotMat(weightMatrix['W_nn'],'Weight matrix negative | negative')
+def plot_weights(weightMatrix):
+    """Plots weight matrixes"""
+    plot_mat(weightMatrix['W_pp'], 'Weight matrix positive | positive')
+    plot_mat(weightMatrix['W_pn'], 'Weight matrix positive | negative')
+    plot_mat(weightMatrix['W_np'], 'Weight matrix negative | positive')
+    plot_mat(weightMatrix['W_nn'], 'Weight matrix negative | negative')
 
 
-def plotMat(npArray,title):
+def plot_mat(npArray, title):
+    """Plots a weight matrix"""
     labels=['catid', 'subcatid', 'brand','date','lineid','colorid','description']
     fig=plt.figure()
     ax = plt.gca()

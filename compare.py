@@ -11,21 +11,36 @@ import numpy as np
 
 
 def compare(x, y, label):
+    """Determines how similar x and y are using the corresponding comparison function for its label
 
-    # TODO what if x or y is none?
+    Will return 0 if:
+        -There is no corresponding comparison for the label
+        -x or y is none
+        -x and y is determined to not be similar at all
+
+    :param x: to be compared with y
+    :param y: tp be compared with x
+    :param label: the type of data for x and y
+    :return: a similarity value between 0 and 1
+    """
+
+    if x is None or y is None:
+        return 0
+
+    if x is "" or y is "":
+        return 0
 
     if label == "catid" or label == "subcatid" or label == "colorid":
         if str(x).isdigit() and str(y).isdigit():
-            return compareID(x, y)
+            return compare_id(x, y)
 
     elif label == 'phone':
         if str(x).isdigit() and str(x).isdigit() and min(len(x),len(y))>0:
-            return comparePhone(x,y)
+            return compare_phone(x, y)
 
     elif label == 'email':
-        if checkType(x,y,str,label) and '@' in x and '@' in y and  min(len(x),len(y))>0:
-            return compareEmail(x,y)
-
+        if check_type(x, y, str, label) and '@' in x and '@' in y and  min(len(x), len(y))>0:
+            return compare_email(x, y)
 
     elif label == "lineid":
         if str(x).isdigit():
@@ -33,44 +48,71 @@ def compare(x, y, label):
         if str(y).isdigit():
             y = str(y)
 
-        if checkType(x, y, str, label):
-            return compareLine(x, y)
+        if check_type(x, y, str, label):
+            return compare_line(x, y)
 
     elif label == "brand" or label == 'name':
-        if checkType(x, y, str, label) and min(len(x),len(y))>0:
-            return compareBrand(x, y)
+        if check_type(x, y, str, label) and min(len(x), len(y))>0:
+            return compare_brand(x, y)
 
     elif label == "date":
-        if checkType(x, y, datetime.date, label):
-            return compareDate(x, y)
+        if check_type(x, y, datetime.date, label):
+            return compare_date(x, y)
 
     elif label == "description":
-        if checkType(x, y, str, label) and min(len(x),len(y))>0:
-            return compareDescription(x, y)
+        if check_type(x, y, str, label) and min(len(x), len(y))>0:
+            return compare_description(x, y)
 
     return 0
 
 
-def checkType(x, y, theType, label):
-    if type(x) == theType and type(y) == theType and x != None:
+def check_type(x, y, the_type, label):
+    """
+    Determines whether x and y is of the correct type
+
+    :param x:
+    :param y:
+    :param the_type:
+    :param label:
+    :return: True if correct type, False otherwise
+    """
+    if type(x) == the_type and type(y) == the_type and x != None:
         return True
     else:
         print("wrong type" + str(type(x)) + str(type(y)) + " for " + label)
         return False
 
 
-def compareDescription(x, y):
+def compare_description(x, y):
+    """
+    Finds the amount of similar words there are in two descriptions and calculates a similarity score
 
-    sameWord, nWords = compareWords(x, y, returnNumWords=True)
+    The score is calculated using a logarithms to try to get similar values regardless of
+    the length of the sentences. The returned value is probabilistic
 
-    N = nWords[0] * nWords[1]
+    :param x: description 1
+    :param y: description 2
+    :return: similarity score
+    """
 
-    similarity = (sameWord / math.log(1 + N)) ** (abs(math.log(N / 2)))
+    same_word, n_words = compare_words(x, y, return_num_words=True)
 
-    return similarity
+    N = n_words[0] * n_words[1]
+
+    similarity = (same_word / math.log(1 + N)) ** (abs(math.log(N / 2)))
+
+    return min(similarity, 1)
 
 
-def comparePhone(x,y):
+def compare_phone(x, y):
+    """
+    Compares two phone numbers. Also makes sure one the phone numbers are approximately the same length
+    :param x: phone number 1
+    :param y:   phone number 2
+    :return: similarity score
+    """
+    x = remove_spaces(x)
+    y = remove_spaces(y)
 
     if (x in y or y in x) and (min(len(x), len(y)) > 0.7*max(len(x), len(y))):
         return 1
@@ -78,22 +120,35 @@ def comparePhone(x,y):
         return 0
 
 
-def compareEmail(x,y):
-    if (x in y or y in x) and (min(len(x), len(y)) > 0.7*max(len(x), len(y))):
+def compare_email(x_email, y_email):
+    """
+    Compares two emails. Also makes sure one the emails are approximately the same length
+    :param x_email: email 1
+    :param y_email:   email 2
+    :return: similarity score
+    """
+    if (x_email in y_email or y_email in x_email) and (min(len(x_email), len(y_email)) > 0.7 * max(len(x_email), len(y_email))):
         return 1
     else:
         return 0
 
 
-def compareDate(x, y):
+def compare_date(x_date, y_date):
+    """
+    Finds the number of days between date 1 and date 2
 
-    if type(x) != datetime.date or type(y) != datetime.date:
+    :param x_date:
+    :param y_date:
+    :return: similarity score
+    """
+
+    if type(x_date) != datetime.date or type(y_date) != datetime.date:
         print("WARNING: Date not type datetime.date")
         return 0
 
     # Assuming type datetime.date
 
-    timedelta = abs((x - y).days)
+    timedelta = abs((x_date - y_date).days)
 
     if timedelta < 3:
         return 1
@@ -101,75 +156,112 @@ def compareDate(x, y):
     return 2 / timedelta
 
 
-def compareID(x, y):
-    if x == y:
+def compare_id(x_id, y_id):
+    """
+    Checks if an int is the same as another int. Used for color id, category id etc
+
+    :return: similarity score
+    """
+    if x_id == y_id:
         return 1
     else:
         return 0
 
 
-def compareLine(x, y):
+def compare_line(x_line, y_line):
+    """
+    Checks if a line in list x is in list y
+
+    :return: similarity score
+    """
     sameLine = 0
 
-    x_arr = splitWords(x, [",", ".", ":", ";"])
-    y_arr = splitWords(y, [",", ".", ":", ";"])
+    x_arr = split_words(x_line, [",", ".", ":", ";"])
+    y_arr = split_words(y_line, [",", ".", ":", ";"])
 
     for line_x in x_arr:
         for line_y in y_arr:
             if line_x == line_y:
                 sameLine += 1
 
-    # TODO Should this be evaluated differently???
+    # Should this be evaluated differently
     if sameLine > 0:
         return 1
     else:
         return 0
 
 
-def compareBrand(x, y):
+def compare_brand(x_brand, y_brand):
+    """
+    Checks if the same word occurs in both x and y
 
-    sameWord = compareWords(x, y)
+    :return: similarity score"""
 
-    if sameWord > 0:
+    same_word = compare_words(x_brand, y_brand)
+
+    if same_word > 0:
         return 1
     else:
         return 0
 
 
-def compareWords(x, y, returnNumWords=False):
+def compare_words(x_string, y_string, return_num_words=False):
+    """
+    Checks how many words occur in both x and y
+
+    :param x_string: x sentence
+    :param y_string: y sentence
+    :param return_num_words: whether the word count in sentence x and y is returned
+    :return: how many times the same word occured in x and y
+    """
 
     treshold = 0.6
-    sameWord = 0
-    x_arr = splitWords(x, [",", ".", ":", ";"])
-    y_arr = splitWords(y, [",", ".", ":", ";"])
+    same_word = 0
+    x_arr = split_words(x_string, [",", ".", ":", ";"])
+    y_arr = split_words(y_string, [",", ".", ":", ";"])
 
     for word_x in x_arr:
         for word_y in y_arr:
-            if compareCharArray(word_x, word_y) > treshold:
-                sameWord += 1
-    if returnNumWords:
-        return [sameWord, [len(x_arr), len(y_arr)]]
+            if compare_char_array(word_x, word_y) > treshold:
+                same_word += 1
+    if return_num_words:
+        return [same_word, [len(x_arr), len(y_arr)]]
     else:
-        return sameWord
+        return same_word
 
 
-def splitWords(x, delimeters):
+def split_words(sentence, delimeters):
+    """Splits sentence into words by delimeters, list of words"""
     for delimeter in delimeters:
-        x = x.replace(delimeter, " ")
-    x_arr = x.split(" ")
-    return x_arr
+        sentence = sentence.replace(delimeter, " ")
+    word_arr = sentence.split(" ")
+    return word_arr
 
 
-def compareCharArray(x, y):
+def remove_spaces(string_with_spaces):
+    """Removes spaces in a string"""
+    x_arr = list(string_with_spaces)
+    while " " in x_arr:
+        x_arr.remove(" ")
+    x_str = ""
+    return x_str.join(x_arr)
+
+
+def compare_char_array(x_word, y_word):
+    """
+    Compares two strings, tries to determine whether it's the same word in x and y
+
+    :return: similarity score
+    """
     
-    if(x=='' or y==''):
+    if x_word == '' or y_word == '':
         return 0
     else:
-        sameChar = 0
-        x = x.lower()
-        y = y.lower()
-        x_arr = list(x)
-        y_arr = list(y)
+        same_char = 0
+        x_word = x_word.lower()
+        y_word = y_word.lower()
+        x_arr = list(x_word)
+        y_arr = list(y_word)
     
         for char_x in x_arr:
             if char_x.isdigit():
@@ -178,6 +270,6 @@ def compareCharArray(x, y):
                 if char_y.isdigit():
                     continue
                 elif char_x == char_y:
-                    sameChar += 1
+                    same_char += 1
     
-        return sameChar / max([len(x_arr), len(y_arr)])
+        return same_char / max([len(x_arr), len(y_arr)])

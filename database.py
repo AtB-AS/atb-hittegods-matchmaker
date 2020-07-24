@@ -4,6 +4,15 @@ from dotenv import load_dotenv
 import psycopg2
 from psycopg2 import OperationalError
 
+"""
+
+Formats queries for the calls to the database
+
+Network requests to the DB
+
+"""
+
+
 dotenv_path = join(dirname(__file__), ".env")
 load_dotenv(dotenv_path)
 
@@ -11,6 +20,7 @@ hostname = os.environ.get("DB_HOST")
 username = os.environ.get("DB_USER")
 password = os.environ.get("DB_PASSWORD")
 database = os.environ.get("DB_NAME")
+
 
 def read_query(query, params=None, do_return=True):
     try:
