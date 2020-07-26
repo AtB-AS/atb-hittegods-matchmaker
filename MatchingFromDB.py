@@ -50,11 +50,7 @@ def found_match(foundid):
 
     best_matches = Matching.do_matching(found_dataset, lost_dataset, n_matches)
 
-    for match in best_matches:
-        if match.score > 0.55:
-            database.insert_match_table(match.lostid, match.foundid, match.score)
-        else:
-            print("Score too low, not sent to DB")
+    insert_bestmatches_to_db(best_matches)
 
 
 def lost_match(lostid):
@@ -89,10 +85,22 @@ def lost_match(lostid):
     found_dataset = Dataset('found', 'multiple', found_df)
     lost_dataset = Dataset('lost', 'single', lost_df)
 
-    bestMatches = Matching.do_matching(lost_dataset, found_dataset, n_matches)
+    best_matches = Matching.do_matching(lost_dataset, found_dataset, n_matches)
 
-    for match in bestMatches:
+    insert_bestmatches_to_db(best_matches)
+
+
+def insert_bestmatches_to_db(matches):
+    """Inserts best matches to DB"""
+
+
+    print("\n\n----- SENDING BEST MATCHES TO DATABASE -----\n\n")
+
+    for match in matches:
         if match.score > 0.55:
+            print("Sending to db: score: ", match.score, ", lostid: ", match.lostid, ", foundid: ", match.foundid)
             database.insert_match_table(match.lostid, match.foundid, match.score)
         else:
-            print("Score too low, not sent to DB")
+            print("Score (", match.score, ") too low, not sent to DB")
+
+    print("sending to database successful")

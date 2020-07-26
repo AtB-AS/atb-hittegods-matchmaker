@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 import random
 import Matching
 import datetime
+from dataset import Dataset
 
 from utils import get_dataframe
 
@@ -117,9 +118,12 @@ def test_matching():
     x_dict = {x_column_names[i]: x_values[i] for i in range(len(x_column_names))}
 
     x = pd.DataFrame(x_dict, index=[0])
-
+    
+    x_dataset=Dataset('lost','single',x)
+    y_dataset=Dataset('found','multiple',data_set)
+    
     print(data_set.head())
     print(x.head())
     print(type(x))
 
-    Matching.do_matching(x, data_set, 5)
+    Matching.do_matching(x_dataset, y_dataset, 5)

@@ -6,3 +6,6 @@ class Match:
         self.lostid = lostid
         self.foundid = foundid
         self.score = score
+
+    def print(self):
+        return ("lostid: %s, foundid: %s, score: %s".format(self.lostid,self.foundid,self.score))

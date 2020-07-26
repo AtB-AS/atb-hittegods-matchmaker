@@ -1,6 +1,5 @@
 import pandas as pd
-from Matching import matching
-
+from dataset import Dataset
 
 def rows_to_df(rows, description):
     element_id = [x[0] for x in description]
@@ -11,13 +10,6 @@ def get_dataframe(fileLocation):
     df = pd.read_csv(datafile,sep='\t',skiprows=(0),header=(0))
     return df
 
-
-def test_matching():
-    x = [0,'Elektronikk', 'Mobil', 'Svart', 4, '5/1/2020', 'Bose']
-    data = get_dataframe('Data/random1000.txt')
-
-    matches = matching(x, data, 5)
-    return matches
 
 
 def id_is_digit(digit):
@@ -30,3 +22,6 @@ def id_is_digit(digit):
         raise Exception("ID is not a digit")
         return False
 
+def remove_first(arr):
+    arr.pop(0)
+    return arr

@@ -28,8 +28,6 @@ def read_query(query, params=None, do_return=True):
             host=hostname, user=username, password=password, dbname=database
         )
         cursor = connection.cursor()
-        print(query)
-        print(params)
         cursor.execute(query, params)
         print(cursor.query)
         connection.commit()

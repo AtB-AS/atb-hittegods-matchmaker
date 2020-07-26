@@ -11,6 +11,7 @@ import compare
 import Weights
 from Match import Match
 from Entry import Entry
+from utils import remove_first
 
 """
 
@@ -42,7 +43,12 @@ def do_matching(x, data, n):
     else:
         data.df = columns.rename_contact_columns(data.df)
 
-    matches=matching(x, data, n)
+    print("\n\n ----- DATAFRAME.HEAD() DATA FROM DATABSE ----- \n\n")
+
+    print(x.df.head())
+    print(data.df.head())
+
+    matches = matching(x, data, n)
 
     return matches
 
@@ -59,28 +65,29 @@ def matching(x_dataset, y_dataset, n):
     :return: best n matches
     """
 
+    print("\n\n----- STARTING MATCHING -----\n\n")
+
     weight_matrix = Weights.get_weight_matrix()
     value_labels = columns.get_value_labels()
 
     x_row = columns.get_row_values(0, x_dataset.df, x_dataset.lost_or_found)
-    x = Entry(x_row[0],x_row.remove(x_row[0]))
+    x = Entry(x_row[0],remove_first(x_row))
 
     scores = []
     y_ids = []
-    print(len(y_dataset.df))
+    all_matches=[]
     for i in range(len(y_dataset.df)):
         y_row = columns.get_row_values(i, y_dataset.df, y_dataset.lost_or_found)
-
-        y = Entry(y_row[0],y_row.remove(y_row[0]))
-        print(y)
+        y = Entry(y_row[0],remove_first(y_row))
         try:
-            scores.append(round(calculate_score(weight_matrix, compare_entries(x.values, y.values, value_labels)), 3))
+            values=compare_entries(x.values,y.values,value_labels)
+            score=calculate_score(weight_matrix,values)
+            scores.append(score)
             y_ids.append(y.id)
         except Exception as e:
+            print("Error calculating score")
             print(e)
 
-
-    # This is where the bug happens
     [bestMatches, bestScores] = find_best_matches(scores, y_ids, n)
 
     matches = []
@@ -90,12 +97,17 @@ def matching(x_dataset, y_dataset, n):
         else:
             matches.append(Match(bestMatches[i], x.id, bestScores[i]))
 
+    print("matching successful")
+
     return matches
 
 
 def find_best_matches(s, id, n):
     """
     Finds best matches of all the similarity scores calculated
+
+    To quickly sort, by score, whilst still retaining the id associated with the score, a
+    dict with id:score pairs is constructed and sorted by score.
 
     :param s: scores
     :param id: id of y values
