@@ -4,6 +4,8 @@ This program will match one entry x with parameters x_1, x_2 ... x_n against a d
 y_1, y_2 .. y_n. Both the single entry 'x' and the dataset 'data' are separate pandas dataframes. It will then write 
 the best scores to a database where they will be used for other things by other programs.
 
+![Alt text](./PythonBackend.png?raw=true "Matching flowchart and process")
+
 ## Datastructure and what is compared
 
 The program will only compare columns, referred to earlier as parameters x_i, with column labels exactly equal to

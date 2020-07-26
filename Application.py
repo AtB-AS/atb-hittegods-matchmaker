@@ -1,9 +1,19 @@
-from MatchingFromDB import foundMatch, lostMatch
+from MatchingFromDB import found_match, lost_match
 from flask import Flask
 import logging
+from utils import id_is_digit
+
+
+
+"""
+
+Endpoints for network calls that will start matching when a new item is registered
+
+"""
 
 app = Flask(__name__)
 logger = logging.getLogger(__name__)
+
 
 @app.route("/")
 def root():
@@ -13,8 +23,9 @@ def root():
 @app.route("/lost/<lost_id>")
 def lost(lost_id):
     try:
-        lostMatch(lost_id)
-        return "success"
+        if id_is_digit(lost_id):
+            lost_match(lost_id)
+            return "success"
     except Exception as e:
         logger.warning(e)
         print("Exception:")
@@ -25,8 +36,9 @@ def lost(lost_id):
 @app.route("/found/<found_id>")
 def found(found_id):
     try:
-        foundMatch(found_id)
-        return "success"
+        if id_is_digit(found_id):
+            found_match(found_id)
+            return "success"
     except Exception as e:
         logger.warning(e)
         print("Exception:")
